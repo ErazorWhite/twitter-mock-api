@@ -32,6 +32,6 @@ server.use(jsonServer.rewriter(routes));
 // Use default router
 // server.use(router);
 server.use("/api", router);
-server.listen(3001, () => {
+server.listen(process.env.PORT || 3001, () => {
   console.log("JSON Server is running");
 });
