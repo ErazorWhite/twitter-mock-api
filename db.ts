@@ -7,6 +7,7 @@ faker.seed(2007);
 faker.date.past({ refDate: '2023-07-26T00:00:00.000Z' });
 
 interface User {
+  id: number;
   userId: string;
   username: string;
   email: string;
@@ -21,8 +22,9 @@ interface User {
   registeredAt: Date;
 }
 
-export function createRandomUser(): User {
+export function createRandomUser(id: number): User {
   return {
+    id: id,
     userId: faker.string.uuid(),
     username: faker.internet.userName(),
     email: faker.internet.email(),
@@ -39,6 +41,7 @@ export function createRandomUser(): User {
 }
 
 interface Post {
+  id: number;
   createdAt: Date;
   author: string;
   avatar: string;
@@ -48,16 +51,17 @@ interface Post {
   messageId: string;
 }
 
-export function createRandomPost(users: User[]): Post {
+export function createRandomPost(users: User[], id: number): Post {
   const randomUserIndex = faker.number.int({ min: 0, max: users.length - 1 });
   const author = users[randomUserIndex];
 
   return {
+    id: id,
     createdAt: faker.date.past(),
     author: author.username,
     avatar: author.avatar,
     message: faker.lorem.paragraph(),
-    image: faker.image.urlLoremFlickr({ category: 'cat' }),
+    image: faker.image.urlLoremFlickr({ category: "cat" }),
     authorId: author.userId,
     messageId: faker.string.uuid(),
   };
@@ -72,7 +76,7 @@ export function createRandomUsersWithPosts(): IData {
   const users: User[] = [];
 
   for (let i = 0; i < 10; i++) {
-    const user = createRandomUser();
+    const user = createRandomUser(i);
     users.push(user);
   }
 
@@ -82,7 +86,7 @@ export function createRandomUsersWithPosts(): IData {
     const numPosts = faker.number.int({ min: 1, max: 5 }); // You can adjust the number of posts per user here
 
     for (let i = 0; i < numPosts; i++) {
-      const post = createRandomPost(users);
+      const post = createRandomPost(users, i);
       posts.push(post);
     }
   });
