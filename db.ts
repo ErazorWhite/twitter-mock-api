@@ -1,10 +1,10 @@
-import { faker } from '@faker-js/faker';
-import * as fs from 'fs';
+import { faker } from "@faker-js/faker";
+import * as fs from "fs";
 
 // Setting our own seed to get consistent faker js results
-faker.seed(2007);
+faker.seed();
 // creates a date past before
-faker.date.past({ refDate: '2023-07-26T00:00:00.000Z' });
+faker.date.past({ refDate: "2023-07-26T00:00:00.000Z" });
 
 interface User {
   id: number;
@@ -26,7 +26,7 @@ export function createRandomUser(id: number): User {
   return {
     id: id,
     userId: faker.string.uuid(),
-    username: faker.internet.userName(),
+    username: faker.internet.displayName(),
     email: faker.internet.email(),
     avatar: faker.image.avatar(),
     following: faker.number.int({ min: 0, max: 500 }),
@@ -35,7 +35,7 @@ export function createRandomUser(id: number): User {
     city: faker.location.city(),
     url: faker.internet.url(),
     description: faker.lorem.text(),
-    banner: faker.image.urlLoremFlickr({ category: 'abstract' }),
+    banner: faker.image.urlLoremFlickr({ category: "abstract" }),
     registeredAt: faker.date.past(),
   };
 }
@@ -51,12 +51,12 @@ interface Post {
   messageId: string;
 }
 
-export function createRandomPost(users: User[], id: number): Post {
+export function createRandomPost(users: User[], postId: number): Post {
   const randomUserIndex = faker.number.int({ min: 0, max: users.length - 1 });
   const author = users[randomUserIndex];
 
   return {
-    id: id,
+    id: postId,
     createdAt: faker.date.past(),
     author: author.username,
     avatar: author.avatar,
@@ -75,19 +75,22 @@ interface IData {
 export function createRandomUsersWithPosts(): IData {
   const users: User[] = [];
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 20; i++) {
     const user = createRandomUser(i);
     users.push(user);
   }
 
+  let postId = 0; // Добавляем новый счетчик для id постов
+
   const posts: Post[] = [];
 
   users.forEach(() => {
-    const numPosts = faker.number.int({ min: 1, max: 5 }); // You can adjust the number of posts per user here
+    const numPosts = faker.number.int({ min: 1, max: 30 }); // You can adjust the number of posts per user here
 
     for (let i = 0; i < numPosts; i++) {
-      const post = createRandomPost(users, i);
+      const post = createRandomPost(users, postId);
       posts.push(post);
+      postId++; // Increment postId here
     }
   });
 
@@ -99,7 +102,7 @@ export const usersWithPosts: IData = createRandomUsersWithPosts();
 // Generate data and write it to db.json
 function generateData() {
   const data = createRandomUsersWithPosts();
-  fs.writeFileSync('db.json', JSON.stringify(data, null, 2));
+  fs.writeFileSync("db.json", JSON.stringify(data, null, 2));
 }
 
 // Call the function to generate and save data to db.json
