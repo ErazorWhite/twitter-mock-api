@@ -63,7 +63,7 @@ exports.usersWithPosts = createRandomUsersWithPosts();
 // Generate data and write it to db.json
 function generateData() {
     var data = createRandomUsersWithPosts();
-    fs.writeFileSync("db.json", JSON.stringify(data, null, 2));
+    fs.writeFileSync("db.json", JSON.stringify(data, null, 2)); // try catch
 }
 // Call the function to generate and save data to db.json
 generateData();
