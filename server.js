@@ -24,7 +24,7 @@ server.use(jsonServer.rewriter(routes));
 server.use("/api", router);
 
 const startJsonServer = () => {
-  const jsonServerPort = process.env.JSON_SERVER_PORT || 3002;
+  const jsonServerPort = process.env.JSON_SERVER_PORT || 10000;
   server.listen(jsonServerPort, () => {
     console.log(`JSON Server is running on port ${jsonServerPort}`);
   });
