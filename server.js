@@ -1,7 +1,7 @@
 const fs = require("fs");
 const jsonServer = require("json-server");
 const server = jsonServer.create();
-const router = jsonServer.router("db.json");
+const db = jsonServer.router("db.json");
 const middlewares = jsonServer.defaults();
 
 server.use(middlewares);
@@ -21,7 +21,7 @@ server.use((req, res, next) => {
 const routes = JSON.parse(fs.readFileSync("./routes.json"));
 server.use(jsonServer.rewriter(routes));
 
-server.use("/api", router);
+server.use("/api", db);
 
 const startJsonServer = () => {
   const jsonServerPort = process.env.JSON_SERVER_PORT || 10000;
@@ -30,4 +30,4 @@ const startJsonServer = () => {
   });
 };
 
-module.exports = { startJsonServer };
+startJsonServer();

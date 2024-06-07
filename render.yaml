@@ -8,11 +8,3 @@ services:
     repo: https://github.com/ErazorWhite/twitter-mock-api
     buildCommand: "npm install"
     startCommand: "npm start"
-    # envVars:
-    #   - key: DATABASE_URL
-    #     fromDatabase:
-    #       name: node-js-db
-    #       property: connectionString
-# databases:
-#   - name: django-app-db # A PostgreSQL database named django-app-db running on a free instance
-#     plan: free
