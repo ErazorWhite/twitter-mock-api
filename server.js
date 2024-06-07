@@ -4,34 +4,30 @@ const server = jsonServer.create();
 const router = jsonServer.router("db.json");
 const middlewares = jsonServer.defaults();
 
-// Set default middlewares (logger, static, cors and no-cache)
 server.use(middlewares);
 
-// Add custom routes before JSON Server router
 server.get("/echo", (req, res) => {
   res.jsonp(req.query);
 });
 
-// To handle POST, PUT and PATCH you need to use a body-parser
-// You can use the one used by JSON Server
 server.use(jsonServer.bodyParser);
 server.use((req, res, next) => {
   if (req.method === "POST") {
     req.body.createdAt = Date.now();
   }
-  // Continue to JSON Server router
   next();
 });
 
-// Read routes from routes.json
 const routes = JSON.parse(fs.readFileSync("./routes.json"));
-
-// Use rewriter with routes from routes.json
 server.use(jsonServer.rewriter(routes));
 
-// Use default router
-// server.use(router);
 server.use("/api", router);
-server.listen(process.env.PORT || 3001, () => {
-  console.log("JSON Server is running");
-});
+
+const startJsonServer = () => {
+  const jsonServerPort = process.env.JSON_SERVER_PORT || 3002;
+  server.listen(jsonServerPort, () => {
+    console.log(`JSON Server is running on port ${jsonServerPort}`);
+  });
+};
+
+module.exports = { startJsonServer };
